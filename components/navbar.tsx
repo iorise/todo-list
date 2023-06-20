@@ -1,8 +1,15 @@
-import { AiOutlineHome, GiHamburgerMenu, VscAdd } from "@/assets/icons";
-import AddProjectModal from "./addProjectModal";
+import { AiOutlineHome, GiHamburgerMenu } from "@/assets/icons";
+import AddNewTaskModal from "./addNewTaskModal";
 
+interface Task {
+  title: string;
+  description: string;
+}
 
 export default function Navbar() {
+  const handleAddTask = (task: Task) => {
+    console.log("Adding task:", task);
+  };
   return (
     <nav>
       <div className="navbar text-2xl px-10">
@@ -15,7 +22,7 @@ export default function Navbar() {
           </button>
         </div>
         <div className="flex-0">
-          <AddProjectModal />
+          <AddNewTaskModal  addTask={handleAddTask} />
         </div>
       </div>
     </nav>
