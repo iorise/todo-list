@@ -1,45 +1,55 @@
-import { useRef, useState, useEffect} from "react"
-import { getDatabase, ref, child, get } from "firebase/database";
+import { useRef, useState, useEffect } from "react";
+import {
+  getDatabase,
+  ref,
+  child,
+  onValue,
+  off,
+  DataSnapshot,
+} from "firebase/database";
 import { firebaseApp } from "@/config/firebaseConfig";
 
-interface Task {
-    title: string
+export interface Task {
+  tasks: string;
+  title: string;
+  description: string;
+  date: string;
+  priority: string;
 }
 
 interface useGetTaskResult {
-    isLoading: boolean
-    tasks: Task[]
+  isLoading: boolean;
+  tasks: Task[];
 }
 
-const useGetTasks = (): useGetTaskResult => {
-    const [isLoading, setIsLoading] = useState(true)
-    const [isLoaded, setIsLoaded] = useState(false)
-    const snapshot = useRef<Task[] | null>(null);
-    const error = useRef(null)
+const useGetTasks = (path: string): useGetTaskResult => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const databaseRef = useRef(ref(getDatabase(firebaseApp)));
 
-    const getTasks = async () => {
-       
-        const db = getDatabase(firebaseApp)
-        const rootReference = ref(db)
-        const dbGet = await get(child(rootReference, "tasks"))
-        const dbTasks = dbGet.val()
-        snapshot.current = dbTasks
-        setIsLoading(false)
-        setIsLoaded(true)
-    }
-
-    useEffect(() => {
-        getTasks()
-    }, [])
-
-    if (isLoading) {
-        return { isLoading: true, tasks: [] };
+  useEffect(() => {
+    const tasksRef = child(databaseRef.current, path);
+    const handleData = (snapshot: DataSnapshot) => {
+      const tasksData = snapshot.val();
+      if (tasksData) {
+        const tasksList = Object.values<Task>(tasksData);
+        setTasks(tasksList);
+        setIsLoading(false);
       }
+    };
 
-    const tasks: Task[] = Object.values(snapshot || {})
+    onValue(tasksRef, handleData);
 
+    return () => {
+      off(tasksRef, "value", handleData);
+    };
+  }, [path]);
 
-  return { isLoading: false, tasks }
-}
+  if (isLoading) {
+    return { isLoading: true, tasks: [] };
+  }
 
-export default useGetTasks
+  return { isLoading: false, tasks };
+};
+
+export default useGetTasks;
