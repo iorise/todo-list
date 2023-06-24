@@ -7,6 +7,7 @@ export default function AddNewTask() {
   const createTasks = useCreateTasks();
   const [modal, setModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isMutating, setIsMutating] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
@@ -69,7 +70,9 @@ export default function AddNewTask() {
 
     if (title && description && date) {
       setFormValid(true);
+      setIsMutating(true);
       createTask();
+      setIsMutating(false);
     } else {
       setFormValid(false);
       return;
@@ -166,9 +169,19 @@ export default function AddNewTask() {
             <button className="btn" onClick={handleChange}>
               Close
             </button>
-            <button type="submit" className="btn" onClick={handleSubmit}>
-              Add Task
-            </button>
+            {!isMutating ? (
+              <button type="submit" className="btn" onClick={handleSubmit}>
+                Add Task
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="btn loading"
+                onClick={handleSubmit}
+              >
+                Adding...
+              </button>
+            )}
           </div>
         </div>
       </div>

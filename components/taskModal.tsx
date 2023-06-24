@@ -54,7 +54,10 @@ export default function TaskModal({ path }: TaskModalProps) {
               <p>{selectedTask.priority}</p>
             </form>
             <div className="modal-action">
-              <button className="btn btn-info" onClick={handleChange}>
+              <button
+                className="btn btn-info text-white"
+                onClick={handleChange}
+              >
                 Okay
               </button>
             </div>

@@ -2,4 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
+.loading {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
 
+.fade-out {
+  opacity: 0;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.sidebar-container {
+  transition: transform 0.3s ease;
+  transform: translateX(-100%);
+}
+
+.sidebar-container.open {
+  transform: translateX(0);
+}
+
+@media (min-width: 768px) {
+  .content-container {
+    transition: margin-left 0.3s ease;
+  }
+
+  .content-container.sidebar-open {
+    margin-left: 0px;
+  }
+
+  .content-container.sidebar-closed {
+    margin-left: -300px;
+  }
+}
