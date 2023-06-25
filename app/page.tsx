@@ -3,7 +3,7 @@
 import Content from "@/components/content/content";
 import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
-import { useState} from "react";
+import { useState, useEffect } from "react";
 
 const HomePage: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState("");
@@ -15,17 +15,24 @@ const HomePage: React.FC = () => {
 
   const handleSidebarOpen = () => {
     setIsSidebarOpen(!isSidebarOpen);
-
   };
+
+  useEffect(() => {
+    setIsSidebarOpen(true);
+  }, []);
   return (
-    <div className="overflow-hidden relative h-screen">
+    <div className="overflow-hidden relative">
       <Navbar handleSidebarOpen={handleSidebarOpen} />
       <main className="flex gap-0 md:gap-52">
-        <div className={`sidebar-container ${isSidebarOpen ? "open" : ""}`}>
+        <div
+          className={`sidebar-container h-auto ${
+            isSidebarOpen ? "open z-10" : "z-10"
+          }`}
+        >
           <Sidebar onItemClick={handleSidebarItemClick} />
         </div>
         <div
-          className={`w-screen absolute -z-10 md:relative content-container mr-10 ${
+          className={`w-full absolute md:z-0 md:relative content-container px-5 ${
             isSidebarOpen ? "sidebar-open" : "sidebar-closed"
           }`}
         >

@@ -2,6 +2,7 @@
 import { VscAdd } from "@/assets/icons";
 import { useEffect, useState } from "react";
 import useCreateTasks from "@/hooks/useCreateTasks";
+import { v4 as uuidv4 } from "uuid";
 
 export default function AddNewTask() {
   const createTasks = useCreateTasks();
@@ -30,6 +31,7 @@ export default function AddNewTask() {
   const createTask = async () => {
     const path = "/tasks";
     const value = {
+      id: uuidv4(),
       title: title,
       description: description,
       date: date,

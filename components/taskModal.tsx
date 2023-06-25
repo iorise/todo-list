@@ -1,5 +1,7 @@
 import { useState } from "react";
 import useGetTasks, { Task } from "@/hooks/useGetTasks";
+import DeleteTask from "./deleteTask";
+import useCreateTasks from "@/hooks/useCreateTasks";
 
 interface TaskModalProps {
   path: string;
@@ -9,6 +11,7 @@ export default function TaskModal({ path }: TaskModalProps) {
   const { tasks } = useGetTasks(path);
   const [modal, setModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const deleteTask = useCreateTasks();
 
   function handleChange() {
     setModal(!modal);
@@ -22,17 +25,20 @@ export default function TaskModal({ path }: TaskModalProps) {
   return (
     <div>
       <div className="font-semibold text-xl w-full">
-        <ul>
-          {tasks.map((task) => (
+        {tasks.map((task) => (
+          <ul className="flex border-b-4 items-center" key={task.id}>
             <li
-              className="cursor-pointer mt-5 border-b-4 w-full"
-              key={task.tasks}
+              className="cursor-pointer mt-5  w-full"
+              key={task.id}
               onClick={() => handleTaskClick(task)}
             >
               {task.title}
             </li>
-          ))}
-        </ul>
+            <li key={task.id} className="mr-10">
+              <DeleteTask task={task} />
+            </li>
+          </ul>
+        ))}
       </div>
       <input
         type="checkbox"

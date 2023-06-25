@@ -10,6 +10,7 @@ import {
 import { firebaseApp } from "@/config/firebaseConfig";
 
 export interface Task {
+  id: string;
   tasks: string;
   title: string;
   description: string;
